@@ -14,6 +14,7 @@ import (
 
 import log "github.com/Deansquirrel/goToolLog"
 
+//初始化
 func init() {
 	global.Args = &object.ProgramArgs{}
 	global.SysConfig = &object.SystemConfig{}
@@ -39,7 +40,7 @@ func main() {
 		common.LoadSysConfig()
 		common.RefreshSysConfig()
 	}
-
+	//安装、卸载或运行程序
 	{
 		svcConfig := &service.Config{
 			Name:        global.SysConfig.Service.Name,
