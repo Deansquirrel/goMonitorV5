@@ -5,6 +5,7 @@ import (
 	"github.com/Deansquirrel/goMonitorV5/object"
 )
 
+//版本信息
 const (
 	//PreVersion = "0.0.0 Build20190101"
 	//TestVersion = "0.0.0 Build20190101"
@@ -12,6 +13,7 @@ const (
 )
 
 const (
+	//http连接超时时间（秒）
 	HttpConnectTimeout = 30
 )
 
