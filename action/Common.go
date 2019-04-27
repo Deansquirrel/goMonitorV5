@@ -1,21 +1,25 @@
 package action
 
-import "errors"
-
-type Type int
-
-const (
-	WindowsService Type = iota
-	IISAppPool
+import (
+	"errors"
+	"github.com/Deansquirrel/goMonitorV5/object"
 )
 
-func NewAction(actionType Type) (IAction, error) {
+func NewAction(actionType object.ActionType) (IAction, error) {
 	switch actionType {
-	case IISAppPool:
+	case object.IISAppPool:
 		return &iisAppPool{}, nil
-	case WindowsService:
+	case object.WindowsService:
 		return &windowsService{}, nil
 	default:
 		return nil, errors.New("unexpected action type")
 	}
+}
+
+func Opr(actionType object.ActionType, id string, oprType OprType) error {
+	a, err := NewAction(actionType)
+	if err != nil {
+		return err
+	}
+	return a.Do(oprType, id)
 }

@@ -1,12 +1,8 @@
 package action
 
-type OprType int
-
-const (
-	Restart OprType = iota
-)
+import "github.com/Deansquirrel/goMonitorV5/object"
 
 type IAction interface {
 	//操作接口
-	Do(oprType OprType, id string) error
+	Do(oprType object.OprType, id string) error
 }
