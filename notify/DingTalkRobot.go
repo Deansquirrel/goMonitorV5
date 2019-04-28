@@ -32,7 +32,6 @@ func (d *dingTalkRobot) GetId() string {
 }
 
 func (d *dingTalkRobot) SendMsg(msg string) error {
-	log.Debug(fmt.Sprintf("DingTalkRobot [%s] send msg [%s]", d.GetId(), msg))
 	if d.config == nil {
 		return errors.New(fmt.Sprintf("dingTalkRobot config data is nil"))
 	}

@@ -1,11 +1,15 @@
 package service
 
-var T *TaskServer
+import (
+	"github.com/Deansquirrel/goMonitorV5/service/taskService"
+)
+
+var T *taskService.TaskService
 
 //启动服务内容
 func Start() error {
 	go func() {
-		T = &TaskServer{}
+		T = &taskService.TaskService{}
 		T.Start()
 	}()
 	return nil

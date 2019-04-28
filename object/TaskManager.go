@@ -2,22 +2,35 @@ package object
 
 import (
 	"fmt"
-	"github.com/Deansquirrel/goMonitorV5/global"
 	"sync"
 )
 
 import log "github.com/Deansquirrel/goToolLog"
 
+type ITaskManager interface {
+	GetIdList() []string
+	GetTask(id string) ITask
+	GetChRegister() chan<- ITask
+	GetChUnregister() chan<- string
+	GetChClose() chan<- struct{}
+}
+
 type taskManager struct {
 	task         map[string]ITask
 	chRegister   chan ITask
 	chUnregister chan string
+	chClose      chan struct{}
 
 	lock sync.Mutex
 }
 
-func NewTaskManager() *taskManager {
-	t := taskManager{}
+func NewTaskManager() ITaskManager {
+	t := taskManager{
+		task:         make(map[string]ITask),
+		chRegister:   make(chan ITask),
+		chUnregister: make(chan string),
+		chClose:      make(chan struct{}),
+	}
 	t.start()
 	return &t
 }
@@ -46,6 +59,10 @@ func (t *taskManager) GetChUnregister() chan<- string {
 	return t.chUnregister
 }
 
+func (t *taskManager) GetChClose() chan<- struct{} {
+	return t.chClose
+}
+
 func (t *taskManager) start() {
 	go func() {
 		for {
@@ -54,7 +71,11 @@ func (t *taskManager) start() {
 				t.register(task)
 			case task := <-t.chUnregister:
 				t.unregister(task)
-			case <-global.Ctx.Done():
+			case <-t.chClose:
+				list := t.GetIdList()
+				for _, id := range list {
+					t.GetChUnregister() <- id
+				}
 				return
 			}
 		}

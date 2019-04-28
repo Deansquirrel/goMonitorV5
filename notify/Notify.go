@@ -21,7 +21,6 @@ func (n *notify) GetNotifyList(id string) ([]iNotify, error) {
 	rList := make([]iNotify, 0)
 	repDingTalkRobot := repNotify.DingTalkRobot{}
 	for _, id := range notifyConfigList.DingTalkRobotId {
-		log.Debug(id)
 		configData, err := repDingTalkRobot.GetConfigData(id)
 		if err != nil {
 			return nil, err

@@ -4,6 +4,12 @@ import (
 	"reflect"
 )
 
+type ITaskConfig interface {
+	GetConfigId() string
+	GetSpec() string
+	IsEqual(c ITaskConfig) bool
+}
+
 type IntTaskConfig struct {
 	FId         string
 	FServer     string
@@ -29,7 +35,7 @@ func (configData *IntTaskConfig) GetConfigId() string {
 
 func (configData *IntTaskConfig) IsEqual(d ITaskConfig) bool {
 	switch reflect.TypeOf(d).String() {
-	case "*object.IntTaskConfig":
+	case "*IntTaskConfig":
 		c, ok := d.(*IntTaskConfig)
 		if !ok {
 			return false
@@ -46,6 +52,36 @@ func (configData *IntTaskConfig) IsEqual(d ITaskConfig) bool {
 			configData.FCheckMin != c.FCheckMin ||
 			configData.FMsgTitle != c.FMsgTitle ||
 			configData.FMsgContent != c.FMsgContent {
+			return false
+		}
+		return true
+	default:
+		return false
+	}
+}
+
+type IntDTaskConfig struct {
+	FId        string
+	FMsgSearch string
+}
+
+func (configData *IntDTaskConfig) GetSpec() string {
+	return ""
+}
+
+func (configData *IntDTaskConfig) GetConfigId() string {
+	return configData.FId
+}
+
+func (configData *IntDTaskConfig) IsEqual(d ITaskConfig) bool {
+	switch reflect.TypeOf(d).String() {
+	case "*object.IntDTaskConfig":
+		c, ok := d.(*IntDTaskConfig)
+		if !ok {
+			return false
+		}
+		if configData.FId != c.FId ||
+			configData.FMsgSearch != c.FMsgSearch {
 			return false
 		}
 		return true
